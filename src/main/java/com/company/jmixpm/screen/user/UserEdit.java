@@ -1,10 +1,13 @@
 package com.company.jmixpm.screen.user;
 
 import com.company.jmixpm.entity.User;
+import com.company.jmixpm.screen.addressfragment.AddressFragment;
 import io.jmix.core.EntityStates;
 import io.jmix.core.security.event.SingleUserPasswordChangeEvent;
+import io.jmix.ui.Fragments;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.component.ComboBox;
+import io.jmix.ui.component.HBoxLayout;
 import io.jmix.ui.component.PasswordField;
 import io.jmix.ui.component.TextField;
 import io.jmix.ui.model.DataContext;
@@ -25,10 +28,8 @@ public class UserEdit extends StandardEditor<User> {
 
     @Autowired
     private EntityStates entityStates;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private PasswordField passwordField;
 
@@ -47,6 +48,11 @@ public class UserEdit extends StandardEditor<User> {
     @Autowired
     private ComboBox<String> timeZoneField;
 
+    @Autowired
+    private Fragments fragments;
+
+    @Autowired
+    private HBoxLayout fieldsWrapper;
     private boolean isNewEntity;
 
     @Subscribe
@@ -86,6 +92,9 @@ public class UserEdit extends StandardEditor<User> {
 
     @Subscribe
     public void onInit(InitEvent event) {
+        AddressFragment addressFragment = fragments.create(this, AddressFragment.class);
+        fieldsWrapper.add(addressFragment.getFragment());
+
         timeZoneField.setOptionsList(Arrays.asList(TimeZone.getAvailableIDs()));
     }
 }
